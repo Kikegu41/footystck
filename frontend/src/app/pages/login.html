@@ -1,0 +1,38 @@
+<section class="contenedor caja">
+  <h1>{{ modoRegistro ? 'Crear cuenta' : 'Iniciar sesión' }}</h1>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <ng-container *ngIf="modoRegistro">
+    <label>Nombre</label>
+    <input type="text" [(ngModel)]="nombre" />
+  </ng-container>
+
+  <label>Email</label>
+  <input type="email" [(ngModel)]="email" />
+
+  <label>Contraseña</label>
+  <input type="password" [(ngModel)]="password" />
+
+  <button class="btn btn-marino ancho" (click)="enviar()">
+    {{ modoRegistro ? 'Registrarme' : 'Entrar' }}
+  </button>
+
+  <p class="cambio">
+    {{ modoRegistro ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?' }}
+    <a (click)="modoRegistro = !modoRegistro">
+      {{ modoRegistro ? 'Inicia sesión' : 'Regístrate' }}
+    </a>
+  </p>
+</section>
+
+<style>
+  .caja { max-width: 380px; padding: 2.5rem 1.5rem; display: flex; flex-direction: column; }
+  h1 { margin: 0 0 1.2rem; }
+  label { font-size: 0.85rem; font-weight: 600; margin-top: 0.8rem; }
+  input { padding: 0.6rem; border: 1px solid var(--gris-borde); border-radius: 8px; margin-top: 0.3rem; }
+  .ancho { width: 100%; margin-top: 1.2rem; }
+  .error { background: #fee2e2; color: #b91c1c; padding: 0.6rem; border-radius: 8px; font-size: 0.9rem; }
+  .cambio { margin-top: 1rem; font-size: 0.9rem; color: var(--gris-texto); }
+  .cambio a { color: var(--azul); cursor: pointer; font-weight: 600; }
+</style>

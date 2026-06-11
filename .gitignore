@@ -1,0 +1,18 @@
+# --- Frontend (Angular / Node) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+npm-debug.log*
+
+# --- Backend (Java / Maven) ---
+backend/target/
+
+# --- Logs y temporales ---
+*.log
+
+# --- Configuración local del asistente ---
+.claude/
+
+# --- Sistema operativo ---
+Thumbs.db
+.DS_Store

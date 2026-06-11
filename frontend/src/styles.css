@@ -1,0 +1,86 @@
+/* ============================================================
+   Estilos globales de FootyStck
+   Tema claro por defecto + tema oscuro (clase 'oscuro' en el body).
+   ============================================================ */
+:root {
+  --verde:   #16a34a;   /* logo y badge "Temporada" */
+  --azul:    #2563eb;   /* precios y boton "Personalizar" */
+  --marino:  #0f172a;   /* botones de accion principales */
+  --naranja: #ea580c;
+  --gris-texto: #64748b;
+  --gris-borde: #e2e8f0;
+  --fondo:   #f8fafc;   /* fondo de la pagina */
+  --blanco:  #ffffff;
+  --tarjeta: #ffffff;   /* fondo de tarjetas/paneles */
+  --fondo-suave: #f1f5f9; /* huecos de imagen y hover */
+  --texto:   #1e293b;   /* color de texto principal */
+}
+
+/* ----- Tema oscuro: solo cambian las variables y unas pocas superficies ----- */
+body.oscuro {
+  --verde: #22c55e;
+  --azul: #3b82f6;
+  --marino: #2563eb;
+  --gris-texto: #94a3b8;
+  --gris-borde: #334155;
+  --fondo: #0f172a;
+  --blanco: #1e293b;
+  --tarjeta: #1e293b;
+  --fondo-suave: #334155;
+  --texto: #e2e8f0;
+}
+
+body.oscuro .cabecera,
+body.oscuro .card,
+body.oscuro .dialogo,
+body.oscuro .drawer,
+body.oscuro .form,
+body.oscuro .cat-btn,
+body.oscuro .busqueda,
+body.oscuro .equipo-card,
+body.oscuro .fila-liga,
+body.oscuro .ver-todo,
+body.oscuro .ver,
+body.oscuro .tallas button,
+body.oscuro .cantidad button,
+body.oscuro table,
+body.oscuro input,
+body.oscuro select,
+body.oscuro textarea {
+  background: var(--tarjeta);
+  color: var(--texto);
+}
+body.oscuro .imagen { background: var(--fondo-suave); }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ----- Botones reutilizables ----- */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.btn:hover { opacity: 0.9; }
+.btn-azul   { background: var(--azul);   color: #fff; }
+.btn-marino { background: var(--marino); color: #fff; }
+.btn-claro  { background: var(--tarjeta); color: var(--texto); border: 1px solid var(--gris-borde); }
+
+/* ----- Contenedor central ----- */
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}

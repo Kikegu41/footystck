@@ -1,0 +1,55 @@
+<section class="contenedor mis">
+  <h1>Mis pedidos</h1>
+
+  <p class="vacio" *ngIf="pedidos.length === 0">Todavía no has hecho ningún pedido.</p>
+
+  <div class="lista" *ngIf="pedidos.length > 0">
+    <div class="pedido" *ngFor="let p of pedidos">
+      <div class="cab" (click)="alternar(p.id)">
+        <div>
+          <strong>Pedido #{{ p.id }}</strong>
+          <span class="fecha">{{ p.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="der">
+          <span class="estado">{{ p.estado }}</span>
+          <span class="total">{{ p.total }} €</span>
+          <span class="flecha">{{ expandido === p.id ? '−' : '+' }}</span>
+        </div>
+      </div>
+
+      <div class="detalle" *ngIf="expandido === p.id">
+        <ul>
+          <li *ngFor="let it of p.items">
+            {{ it.cantidad }} × {{ it.camiseta_nombre }}
+            <span class="sub">(talla {{ it.talla }}<span *ngIf="it.nombre_jugador">, {{ it.nombre_jugador }} {{ it.dorsal }}</span>) — {{ it.precio_unit }} €/ud</span>
+          </li>
+        </ul>
+        <div class="desglose">
+          <div class="fila" *ngIf="p.descuento && p.descuento > 0"><span>Descuento</span><span>− {{ p.descuento }} €</span></div>
+          <div class="fila"><span>Envío</span><span>{{ p.envio ? p.envio + ' €' : 'Gratis' }}</span></div>
+          <div class="fila total"><span>Total</span><span>{{ p.total }} €</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mis { padding: 2rem 1.5rem; max-width: 820px; }
+  .mis h1 { margin: 0 0 1.2rem; }
+  .vacio { color: var(--gris-texto); padding: 2rem 0; }
+  .lista { display: flex; flex-direction: column; gap: 0.8rem; }
+  .pedido { background: var(--tarjeta); border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; }
+  .cab { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.2rem; cursor: pointer; }
+  .fecha { color: var(--gris-texto); font-size: 0.85rem; margin-left: 0.8rem; }
+  .der { display: flex; align-items: center; gap: 1rem; }
+  .estado { background: #dcfce7; color: #166534; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.78rem; }
+  .total { font-weight: 700; color: var(--azul); }
+  .flecha { color: var(--gris-texto); font-size: 1.2rem; width: 16px; text-align: center; }
+  .detalle { border-top: 1px solid var(--gris-borde); padding: 1rem 1.2rem; }
+  .detalle ul { margin: 0 0 0.8rem; padding-left: 1.2rem; }
+  .detalle .sub { color: var(--gris-texto); }
+  .desglose { border-top: 1px dashed var(--gris-borde); padding-top: 0.6rem; }
+  .desglose .fila { display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.9rem; }
+  .desglose .fila.total { font-weight: 700; }
+</style>

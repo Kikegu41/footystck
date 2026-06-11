@@ -1,0 +1,88 @@
+<div class="overlay" (click)="cerrar.emit()"></div>
+
+<div class="dialogo">
+  <button class="x" (click)="cerrar.emit()">✕</button>
+
+  <div class="cols">
+    <div class="form">
+      <h2>Personalizar Camiseta</h2>
+      <p class="sub">{{ camiseta.equipo_nombre || camiseta.nombre }} · Camiseta {{ camiseta.tipo }} {{ camiseta.temporada }}</p>
+
+      <label>Talla *</label>
+      <div class="tallas">
+        <button *ngFor="let t of tallas" [class.activa]="talla === t" (click)="talla = t">{{ t }}</button>
+      </div>
+
+      <label>Nombre del jugador (opcional)</label>
+      <input type="text" maxlength="20" [(ngModel)]="nombre" placeholder="GARCÍA" />
+      <small>{{ nombre.length }}/20 caracteres</small>
+
+      <label>Número (opcional)</label>
+      <input type="text" maxlength="2" [(ngModel)]="numero" placeholder="7" />
+
+      <label>Cantidad</label>
+      <div class="cantidad">
+        <button (click)="cambiarCantidad(-1)">−</button>
+        <span>{{ cantidad }}</span>
+        <button (click)="cambiarCantidad(1)">+</button>
+      </div>
+
+      <p class="extra-nota" *ngIf="extra() > 0">+ {{ extra() }}€ por personalización (nombre/dorsal)</p>
+      <div class="total">
+        <span>Total</span>
+        <strong>{{ total() }} €</strong>
+      </div>
+
+      <div class="acciones">
+        <button class="btn btn-claro" (click)="cerrar.emit()">Cancelar</button>
+        <button class="btn btn-marino" (click)="anadir()">Añadir al carrito</button>
+      </div>
+    </div>
+
+    <div class="imagen">
+      <svg viewBox="0 0 320 380" class="jersey">
+        <path class="tela" [style.fill]="color" d="M90,46 L112,42 C136,74 184,74 208,42 L230,46 L300,88 L272,158 L256,140 L256,346 L64,346 L64,140 L48,158 L20,88 Z" />
+        <path class="cuello" [style.fill]="colorCuello" d="M112,42 C136,74 184,74 208,42 L200,36 C184,60 136,60 120,36 Z" />
+        <text x="160" y="162" text-anchor="middle" class="t-nombre" [style.fill]="colorTexto" [attr.font-size]="tamNombre()" [attr.opacity]="nombre ? 1 : 0.4">{{ (nombre || 'NOMBRE').toUpperCase() }}</text>
+        <text x="160" y="294" text-anchor="middle" class="t-numero" [style.fill]="colorTexto" [attr.font-size]="tamNumero()" [attr.opacity]="numero ? 1 : 0.4">{{ numero || '0' }}</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<style>
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 60; }
+  .dialogo {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 61; background: var(--tarjeta); border-radius: 16px; width: 820px; max-width: 94vw;
+    max-height: 92vh; overflow: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .x { position: absolute; top: 12px; right: 14px; border: none; background: none; font-size: 1.1rem; cursor: pointer; color: var(--gris-texto); z-index: 2; }
+  .cols { display: flex; }
+  .form { flex: 1; padding: 1.6rem; display: flex; flex-direction: column; }
+  .form h2 { margin: 0; font-size: 1.3rem; }
+  .sub { color: var(--gris-texto); font-size: 0.85rem; margin: 0.2rem 0 1rem; }
+  label { font-weight: 700; font-size: 0.9rem; margin-top: 1rem; }
+  .tallas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+  .tallas button {
+    padding: 0.6rem 0; border: 1px solid var(--gris-borde); background: #fff; border-radius: 8px;
+    cursor: pointer; font-weight: 600;
+  }
+  .tallas button.activa { border-color: var(--azul); color: var(--azul); background: #eff6ff; }
+  input { margin-top: 0.4rem; padding: 0.6rem 0.7rem; border: 1px solid var(--gris-borde); border-radius: 8px; font-size: 1rem; }
+  small { color: var(--gris-texto); font-size: 0.78rem; margin-top: 0.25rem; }
+  .cantidad { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+  .cantidad button { width: 38px; height: 38px; border: 1px solid var(--gris-borde); background: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer; }
+  .cantidad span { font-weight: 700; min-width: 20px; text-align: center; }
+  .extra-nota { color: var(--verde); font-weight: 600; font-size: 0.82rem; margin: 0.8rem 0 0; }
+  .total { display: flex; justify-content: space-between; align-items: center; margin: 0.6rem 0 0.4rem; padding-top: 1rem; border-top: 1px solid var(--gris-borde); }
+  .total strong { color: var(--azul); font-size: 1.3rem; }
+  .acciones { display: flex; gap: 0.7rem; margin-top: 0.8rem; }
+  .acciones .btn { flex: 1; }
+  .imagen { width: 380px; background: var(--fondo-suave); display: flex; align-items: center; justify-content: center; padding: 0.7rem; border-radius: 0 16px 16px 0; }
+  .jersey { width: 100%; height: auto; max-height: 540px; }
+  .jersey .tela { fill: var(--azul); }
+  .jersey .cuello { fill: #1e3a8a; }
+  .jersey .t-nombre { fill: #fff; font-weight: 800; letter-spacing: 1px; }
+  .jersey .t-numero { fill: #fff; font-weight: 900; }
+</style>

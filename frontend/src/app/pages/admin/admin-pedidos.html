@@ -1,0 +1,47 @@
+<h3>Pedidos recibidos</h3>
+
+<p class="vacio" *ngIf="pedidos.length === 0">Todavía no hay pedidos.</p>
+
+<table *ngIf="pedidos.length > 0">
+  <thead>
+    <tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Email</th><th>Total</th><th>Estado</th><th></th></tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let p of pedidos">
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ p.cliente_nombre }}</td>
+        <td class="email">{{ p.cliente_email }}</td>
+        <td><strong>{{ p.total }} €</strong></td>
+        <td><span class="estado">{{ p.estado }}</span></td>
+        <td><button class="ver" (click)="alternar(p.id)">{{ expandido === p.id ? 'Ocultar' : 'Ver' }}</button></td>
+      </tr>
+      <tr class="detalle" *ngIf="expandido === p.id">
+        <td colspan="7">
+          <ul>
+            <li *ngFor="let it of p.items">
+              {{ it.cantidad }} × {{ it.camiseta_nombre }}
+              <span class="sub">
+                (talla {{ it.talla }}<span *ngIf="it.nombre_jugador">, {{ it.nombre_jugador }} {{ it.dorsal }}</span>) — {{ it.precio_unit }} €/ud
+              </span>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+
+<style>
+  h3 { margin: 0 0 1rem; }
+  .vacio { color: var(--gris-texto); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--gris-borde); }
+  .email { color: var(--azul); }
+  .estado { background: #dcfce7; color: #166534; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.8rem; }
+  .ver { border: 1px solid var(--gris-borde); background: #fff; border-radius: 6px; padding: 0.3rem 0.6rem; cursor: pointer; }
+  tr.detalle td { background: #f8fafc; }
+  tr.detalle ul { margin: 0; padding-left: 1.2rem; }
+  tr.detalle .sub { color: var(--gris-texto); }
+</style>

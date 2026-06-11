@@ -1,0 +1,89 @@
+<ng-container *ngIf="modoEquipos()">
+  <section class="contenedor cabecera-seccion">
+    <h1>{{ tituloEquipos() }}</h1>
+    <p>Elige un equipo para ver sus camisetas</p>
+    <button class="btn btn-claro" (click)="verTodo()">← Ver todas las camisetas</button>
+  </section>
+
+  <section class="contenedor">
+    <p class="aviso" *ngIf="cargando">Cargando equipos...</p>
+    <p class="aviso" *ngIf="!cargando && equipos.length === 0">No hay equipos en esta categoría.</p>
+    <div class="rejilla-equipos" *ngIf="!cargando && equipos.length > 0">
+      <button class="equipo-card" *ngFor="let e of equipos" (click)="verEquipo(e)">
+        <img *ngIf="e.escudo_url" [src]="e.escudo_url" [alt]="e.nombre" (error)="ocultar($event)" />
+        <span class="inicial" *ngIf="!e.escudo_url">{{ e.nombre.charAt(0) }}</span>
+        <span class="nombre">{{ e.nombre }}</span>
+      </button>
+    </div>
+  </section>
+</ng-container>
+
+<ng-container *ngIf="!modoEquipos()">
+  <section class="contenedor cabecera-seccion">
+    <h1>Nuestra Colección</h1>
+    <p>Descubre las mejores camisetas de fútbol con opciones de personalización</p>
+  </section>
+
+  <section class="contenedor controles">
+    <div class="busqueda">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" placeholder="Buscar equipos, ligas..." [(ngModel)]="buscar" (keyup.enter)="cargarCamisetas()" />
+    </div>
+    <select (change)="cambiarOrden($event)">
+      <option value="popularidad">Más populares</option>
+      <option value="precio_asc">Precio: menor a mayor</option>
+      <option value="precio_desc">Precio: mayor a menor</option>
+    </select>
+  </section>
+
+  <section class="contenedor" *ngIf="equipoId">
+    <div class="filtro-activo">
+      Mostrando camisetas de <strong>{{ equipoNombre }}</strong>
+      <button (click)="verTodo()">✕ Quitar filtro</button>
+    </div>
+  </section>
+
+  <section class="contenedor">
+    <p class="aviso" *ngIf="cargando">Cargando camisetas...</p>
+    <p class="aviso" *ngIf="!cargando && camisetas.length === 0">No hay camisetas que mostrar.</p>
+    <div class="rejilla" *ngIf="!cargando && camisetas.length > 0">
+      <app-product-card *ngFor="let c of camisetas" [camiseta]="c"></app-product-card>
+    </div>
+  </section>
+</ng-container>
+
+<style>
+  .cabecera-seccion { padding: 2rem 1.5rem 0.5rem; }
+  .cabecera-seccion h1 { margin: 0; font-size: 1.8rem; }
+  .cabecera-seccion p { color: var(--gris-texto); margin: 0.3rem 0 0.8rem; }
+  .controles { display: flex; gap: 1rem; align-items: center; padding-top: 1rem; flex-wrap: wrap; }
+  .busqueda {
+    flex: 1; min-width: 240px; display: flex; align-items: center; gap: 0.5rem;
+    background: #fff; border: 1px solid var(--gris-borde); border-radius: 999px; padding: 0.5rem 1rem;
+  }
+  .busqueda input { border: none; outline: none; flex: 1; font-size: 0.95rem; background: transparent; }
+  select { padding: 0.55rem 0.8rem; border: 1px solid var(--gris-borde); border-radius: 8px; background: #fff; }
+  .rejilla {
+    display: grid; gap: 1.3rem; margin: 1.5rem 0 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+  .aviso { color: var(--gris-texto); padding: 2rem 0; }
+  .filtro-activo { display: flex; align-items: center; gap: 1rem; background: #eef6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 0.7rem 1rem; border-radius: 8px; margin-top: 1rem; }
+  .filtro-activo button { margin-left: auto; border: none; background: var(--azul); color: #fff; border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer; font-weight: 600; }
+  .rejilla-equipos {
+    display: grid; gap: 1rem; margin: 1.5rem 0 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  .equipo-card {
+    display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+    background: #fff; border: 1px solid var(--gris-borde); border-radius: 12px;
+    padding: 1.2rem 0.8rem; cursor: pointer;
+  }
+  .equipo-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .equipo-card img { width: 56px; height: 56px; object-fit: contain; }
+  .equipo-card .inicial {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--azul); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;
+  }
+  .equipo-card .nombre { font-weight: 600; text-align: center; font-size: 0.9rem; }
+</style>

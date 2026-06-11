@@ -1,0 +1,16 @@
+CARPETA DE FOTOS DE CAMISETAS
+=============================
+
+Pon aqui tus fotos JPG/PNG de camisetas (por ejemplo: real-madrid-local.jpg).
+
+Luego, en el panel de Admin, al crear o editar una camiseta, en el campo
+"Imagen (URL o ruta)" escribe la ruta asi:
+
+    /img/camisetas/real-madrid-local.jpg
+
+(Empezando por /img/camisetas/ y el nombre exacto del archivo.)
+
+Tambien puedes pegar una URL completa de internet si lo prefieres.
+
+NOTA: si añades fotos nuevas mientras el frontend esta arrancado, reinicialo
+(para el "npm start" y vuelvelo a lanzar) para que las sirva.

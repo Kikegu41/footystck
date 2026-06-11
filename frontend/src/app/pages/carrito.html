@@ -1,0 +1,54 @@
+<section class="contenedor cart">
+  <h1>Carrito de Compras</h1>
+  <p class="sub">{{ carrito.cantidadTotal() }} artículo(s) en tu carrito</p>
+
+  <p class="vacio" *ngIf="carrito.items.length === 0">Tu carrito está vacío.</p>
+
+  <ng-container *ngIf="carrito.items.length > 0">
+    <div class="lineas">
+      <div class="linea" *ngFor="let item of carrito.items; let i = index">
+        <img [src]="item.imagen_url" [alt]="item.nombre" />
+        <div class="datos">
+          <strong>{{ item.equipo_nombre || item.nombre }}</strong>
+          <span class="sub">{{ item.nombre }}</span>
+          <span class="sub">Talla: {{ item.talla }}</span>
+          <span class="sub personalizada" *ngIf="item.nombre_jugador || item.dorsal">
+            Personalización: {{ item.nombre_jugador }} {{ item.dorsal }} (+2€)
+          </span>
+          <span class="sub">Cantidad: {{ item.cantidad }}</span>
+        </div>
+        <div class="precio">{{ carrito.precioUnidad(item) }} €</div>
+        <button class="borrar" (click)="carrito.eliminar(i)">Eliminar</button>
+      </div>
+    </div>
+
+    <div class="resumen">
+      <div class="fila total"><span>Subtotal</span><span>{{ carrito.total() }} €</span></div>
+      <p class="nota">Los gastos de envío y el desglose se calculan en el siguiente paso.</p>
+
+      <button class="btn btn-marino ancho" (click)="proceder()">Proceder con el pago</button>
+      <button class="btn btn-claro ancho" (click)="carrito.vaciar()">Vaciar carrito</button>
+    </div>
+  </ng-container>
+</section>
+
+<style>
+  .cart { padding: 2rem 1.5rem; max-width: 720px; }
+  .cart h1 { margin: 0; }
+  .sub { color: var(--gris-texto); font-size: 0.85rem; }
+  .personalizada { color: var(--verde); font-weight: 600; }
+  .vacio { color: var(--gris-texto); padding: 2rem 0; }
+  .lineas { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem; }
+  .linea { display: flex; align-items: center; gap: 1rem; background: var(--tarjeta); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 0.8rem; }
+  .linea img { width: 64px; height: 80px; object-fit: cover; border-radius: 8px; }
+  .datos { display: flex; flex-direction: column; flex: 1; }
+  .precio { color: var(--azul); font-weight: 700; }
+  .borrar { background: none; border: none; cursor: pointer; color: var(--gris-texto); font-size: 0.82rem; text-decoration: underline; }
+  .borrar:hover { color: #b91c1c; }
+  .resumen { margin-top: 1.5rem; background: var(--tarjeta); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 1.2rem; }
+  .nota { color: var(--gris-texto); font-size: 0.8rem; margin: 0.2rem 0 0.6rem; }
+  .fila { display: flex; justify-content: space-between; padding: 0.35rem 0; }
+  .fila.total { font-weight: 700; font-size: 1.1rem; border-top: 1px solid var(--gris-borde); margin-top: 0.5rem; padding-top: 0.8rem; }
+  .gratis { color: var(--verde); font-weight: 600; }
+  .ancho { width: 100%; margin-top: 0.6rem; }
+</style>

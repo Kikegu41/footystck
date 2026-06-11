@@ -1,0 +1,61 @@
+<ng-container *ngIf="ui.menuAbierto">
+  <div class="overlay" (click)="ui.cerrar()"></div>
+
+  <aside class="drawer">
+    <div class="cabecera">
+      <div>
+        <h2>Menú de Categorías</h2>
+        <p>Explora por ligas y equipos</p>
+      </div>
+      <button class="cerrar-x" (click)="ui.cerrar()">✕</button>
+    </div>
+
+    <button class="ver-todo" (click)="verTodo()">Ver todas las camisetas</button>
+
+    <div class="grupos">
+      <button class="fila-liga" *ngFor="let liga of ligasConEquipos()" (click)="entrarLiga(liga)">
+        <span class="nombre">{{ liga.nombre }} <small>{{ liga.pais }}</small></span>
+        <span class="derecha">
+          <span class="cuenta">{{ liga.equipos?.length }}</span>
+          <span class="flecha">›</span>
+        </span>
+      </button>
+
+      <button class="fila-liga" *ngIf="otros.length > 0" (click)="entrarOtros()">
+        <span class="nombre">Otros <small>equipos destacados</small></span>
+        <span class="derecha">
+          <span class="cuenta">{{ otros.length }}</span>
+          <span class="flecha">›</span>
+        </span>
+      </button>
+    </div>
+
+    <button class="btn btn-claro cerrar" (click)="ui.cerrar()">Cerrar menú</button>
+  </aside>
+</ng-container>
+
+<style>
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 50; }
+  .drawer {
+    position: fixed; top: 0; right: 0; height: 100%; width: 360px; max-width: 90vw;
+    background: #fff; z-index: 51; box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+    display: flex; flex-direction: column; padding: 1.2rem;
+  }
+  .cabecera { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cabecera h2 { margin: 0; font-size: 1.2rem; }
+  .cabecera p { margin: 0.2rem 0 0; color: var(--gris-texto); font-size: 0.85rem; }
+  .cerrar-x { border: none; background: none; font-size: 1.1rem; cursor: pointer; color: var(--gris-texto); }
+  .ver-todo { margin: 1rem 0; padding: 0.7rem; border: 1px solid var(--gris-borde); border-radius: 8px; background: #f8fafc; cursor: pointer; font-weight: 600; text-align: left; }
+  .grupos { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.45rem; }
+  .fila-liga {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--gris-borde);
+    border-radius: 10px; cursor: pointer; font-size: 0.95rem; font-weight: 600; text-align: left;
+  }
+  .fila-liga:hover { background: #f1f5f9; }
+  .nombre small { color: var(--gris-texto); font-weight: 400; margin-left: 0.3rem; }
+  .derecha { display: flex; align-items: center; gap: 0.6rem; }
+  .cuenta { background: var(--verde); color: #fff; font-size: 0.75rem; font-weight: 700; border-radius: 999px; padding: 0.1rem 0.55rem; }
+  .flecha { color: var(--gris-texto); font-size: 1.2rem; }
+  .cerrar { margin-top: 1rem; width: 100%; }
+</style>

@@ -1,0 +1,90 @@
+<p class="ok" *ngIf="mensaje">{{ mensaje }}</p>
+
+<div class="cabecera">
+  <h3>Ligas</h3>
+  <button class="btn btn-marino" (click)="nuevaLiga()">+ Nueva liga</button>
+</div>
+
+<div class="form" *ngIf="mostrarLigaForm">
+  <div class="rejilla">
+    <label>Nombre <input [(ngModel)]="ligaForm.nombre" /></label>
+    <label>País <input [(ngModel)]="ligaForm.pais" /></label>
+    <label>División
+      <select [(ngModel)]="ligaForm.division">
+        <option [ngValue]="1">1ª</option>
+        <option [ngValue]="2">2ª</option>
+      </select>
+    </label>
+    <label>Código API (opcional) <input type="number" [(ngModel)]="ligaForm.codigo_api" /></label>
+  </div>
+  <div class="acciones">
+    <button class="btn btn-claro" (click)="mostrarLigaForm = false">Cancelar</button>
+    <button class="btn btn-marino" (click)="guardarLiga()">Guardar liga</button>
+  </div>
+</div>
+
+<table>
+  <thead><tr><th>Liga</th><th>País</th><th>Div.</th><th></th></tr></thead>
+  <tbody>
+    <tr *ngFor="let l of ligas" [class.sel]="ligaSel?.id === l.id">
+      <td>{{ l.nombre }}</td>
+      <td>{{ l.pais }}</td>
+      <td>{{ l.division }}ª</td>
+      <td class="btns">
+        <button (click)="editarLiga(l)">Editar</button>
+        <button (click)="verEquipos(l)">Equipos</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-container *ngIf="ligaSel">
+  <div class="cabecera equipos-cab">
+    <h3>Equipos de {{ ligaSel.nombre }}</h3>
+    <button class="btn btn-marino" (click)="nuevoEquipo()">+ Nuevo equipo</button>
+  </div>
+
+  <div class="form" *ngIf="mostrarEquipoForm">
+    <div class="rejilla">
+      <label>Nombre <input [(ngModel)]="equipoForm.nombre" /></label>
+      <label>Escudo (URL) <input [(ngModel)]="equipoForm.escudo_url" /></label>
+      <label class="check"><input type="checkbox" [(ngModel)]="equipoForm.es_otros" /> Es "Otros" (sin liga)</label>
+    </div>
+    <div class="acciones">
+      <button class="btn btn-claro" (click)="mostrarEquipoForm = false">Cancelar</button>
+      <button class="btn btn-marino" (click)="guardarEquipo()">Guardar equipo</button>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th></th><th>Equipo</th><th></th></tr></thead>
+    <tbody>
+      <tr *ngFor="let e of equipos">
+        <td><img *ngIf="e.escudo_url" [src]="e.escudo_url" loading="lazy" /></td>
+        <td>{{ e.nombre }}</td>
+        <td class="btns">
+          <button (click)="editarEquipo(e)">Editar</button>
+          <button (click)="borrarEquipo(e)">Borrar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
+
+<style>
+  .ok { background: #dcfce7; color: #166534; padding: 0.6rem; border-radius: 8px; }
+  .cabecera { display: flex; justify-content: space-between; align-items: center; margin: 0.5rem 0 1rem; }
+  .equipos-cab { margin-top: 2rem; border-top: 2px solid var(--gris-borde); padding-top: 1.2rem; }
+  .cabecera h3 { margin: 0; }
+  .form { background: #f8fafc; border: 1px solid var(--gris-borde); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.2rem; }
+  .rejilla { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .rejilla label { display: flex; flex-direction: column; font-size: 0.85rem; font-weight: 600; gap: 0.3rem; }
+  .rejilla input, .rejilla select { padding: 0.5rem; border: 1px solid var(--gris-borde); border-radius: 8px; font-weight: 400; }
+  .rejilla .check { flex-direction: row; align-items: center; gap: 0.5rem; }
+  .acciones { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-bottom: 1rem; }
+  th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--gris-borde); }
+  tr.sel { background: #eff6ff; }
+  td img { width: 26px; height: 26px; object-fit: contain; }
+  .btns button { border: none; background: none; cursor: pointer; font-size: 0.95rem; }
+</style>

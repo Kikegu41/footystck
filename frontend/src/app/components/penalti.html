@@ -1,0 +1,115 @@
+<div class="overlay"></div>
+
+<div class="juego">
+  <h2>¡Lanza a puerta!</h2>
+  <p class="sub">Marca para ganar un código de descuento · Disparos restantes: <strong>{{ restantes }}</strong></p>
+
+  <div class="campo">
+    <!-- Porteria con sus 3 zonas -->
+    <div class="porteria">
+      <div class="portero"
+           [class.izquierda]="ladoPortero === 'izquierda'"
+           [class.centro]="ladoPortero === 'centro'"
+           [class.derecha]="ladoPortero === 'derecha'">
+        <svg viewBox="0 0 50 80" width="46" height="72">
+          <circle cx="25" cy="12" r="9" fill="#fcd34d"/>
+          <rect x="2" y="20" width="10" height="24" rx="5" fill="var(--verde)"/>
+          <rect x="38" y="20" width="10" height="24" rx="5" fill="var(--verde)"/>
+          <rect x="13" y="22" width="24" height="34" rx="6" fill="var(--verde)"/>
+          <rect x="16" y="55" width="7" height="23" rx="3" fill="#0f172a"/>
+          <rect x="27" y="55" width="7" height="23" rx="3" fill="#0f172a"/>
+        </svg>
+      </div>
+
+      <button class="zona" [disabled]="animando || terminado" (click)="chutar('izquierda')"></button>
+      <button class="zona" [disabled]="animando || terminado" (click)="chutar('centro')"></button>
+      <button class="zona" [disabled]="animando || terminado" (click)="chutar('derecha')"></button>
+    </div>
+
+    <!-- Pelota -->
+    <div class="pelota"
+         [class.chutada]="ladoPelota"
+         [class.izquierda]="ladoPelota === 'izquierda'"
+         [class.centro]="ladoPelota === 'centro'"
+         [class.derecha]="ladoPelota === 'derecha'">
+      <svg viewBox="0 0 24 24" width="30" height="30">
+        <circle cx="12" cy="12" r="11" fill="#fff" stroke="#cbd5e1"/>
+        <path d="M12 6l3 2.2-1.1 3.5h-3.8L9 8.2z" fill="#0f172a"/>
+        <path d="M12 6V3.5M14.9 8.2l2.2-1M9.1 8.2l-2.2-1M10.1 11.7l-1.4 2.3M13.9 11.7l1.4 2.3" stroke="#0f172a" stroke-width="0.7" fill="none"/>
+      </svg>
+    </div>
+  </div>
+
+  <p class="mensaje">{{ mensaje }}</p>
+
+  <!-- Resultado final -->
+  <div class="resultado" *ngIf="terminado">
+    <div class="premio" *ngIf="mejorPremio > 0">
+      <p class="grande">¡Has ganado un <strong>{{ mejorPremio }}%</strong> de descuento!</p>
+      <p class="codigo">Tu código: <strong>{{ codigoPremio() }}</strong></p>
+      <p class="nota">Apúntalo y úsalo en tu próxima compra.</p>
+    </div>
+    <p class="fallo" *ngIf="mejorPremio === 0">Esta vez no ha entrado. ¡La próxima caerá!</p>
+    <button class="btn btn-marino" (click)="cerrar.emit()">Continuar</button>
+  </div>
+</div>
+
+<style>
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 70; }
+  .juego {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 71; background: var(--tarjeta); color: var(--texto); border-radius: 16px;
+    width: 440px; max-width: 94vw; padding: 1.5rem; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  .juego h2 { margin: 0; font-size: 1.3rem; }
+  .sub { color: var(--gris-texto); font-size: 0.85rem; margin: 0.3rem 0 1rem; }
+
+  .campo {
+    position: relative; height: 320px; border-radius: 12px; overflow: hidden;
+    background: linear-gradient(#3f9b4f, #2f7d3e);
+  }
+  /* lineas del cesped */
+  .campo::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(transparent 0 34px, rgba(255,255,255,0.05) 34px 68px);
+  }
+
+  .porteria {
+    position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 150px; display: flex;
+    border: 6px solid #fff; border-bottom: none; border-radius: 4px 4px 0 0;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.18) 0 2px, transparent 2px 16px),
+                repeating-linear-gradient(rgba(255,255,255,0.18) 0 2px, transparent 2px 16px);
+    z-index: 1;
+  }
+  .zona { flex: 1; border: none; background: transparent; cursor: pointer; z-index: 4; transition: background 0.15s; }
+  .zona:hover:enabled { background: rgba(255,255,255,0.15); }
+  .zona:disabled { cursor: default; }
+
+  .portero {
+    position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+    z-index: 2; transition: transform 0.6s ease;
+  }
+  .portero.izquierda { transform: translateX(calc(-50% - 95px)) rotate(-14deg); }
+  .portero.centro    { transform: translateX(-50%); }
+  .portero.derecha   { transform: translateX(calc(-50% + 95px)) rotate(14deg); }
+
+  .pelota {
+    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    z-index: 6; transition: transform 0.85s cubic-bezier(.3,.7,.4,1);
+  }
+  .pelota.chutada.izquierda { transform: translate(calc(-50% - 108px), -212px) scale(0.7); }
+  .pelota.chutada.centro    { transform: translate(-50%, -226px) scale(0.7); }
+  .pelota.chutada.derecha   { transform: translate(calc(-50% + 108px), -212px) scale(0.7); }
+
+  .mensaje { font-weight: 700; min-height: 1.4em; margin: 0.9rem 0 0.4rem; }
+
+  .resultado { border-top: 1px solid var(--gris-borde); margin-top: 0.6rem; padding-top: 0.9rem; }
+  .premio .grande { font-size: 1.1rem; margin: 0 0 0.3rem; }
+  .codigo { font-size: 1.05rem; margin: 0.2rem 0; }
+  .codigo strong { background: var(--fondo-suave); padding: 0.15rem 0.6rem; border-radius: 8px; letter-spacing: 1px; color: var(--azul); }
+  .nota { color: var(--gris-texto); font-size: 0.8rem; margin: 0.3rem 0 1rem; }
+  .fallo { margin: 0.4rem 0 1rem; color: var(--gris-texto); }
+  .resultado .btn { width: 100%; }
+</style>

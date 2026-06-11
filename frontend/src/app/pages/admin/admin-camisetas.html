@@ -1,0 +1,83 @@
+<div class="barra">
+  <input class="buscar" placeholder="Buscar por nombre o equipo..." [(ngModel)]="buscar" (ngModelChange)="filtrar()" />
+  <button class="btn btn-marino" (click)="nuevo()">+ Nueva camiseta</button>
+</div>
+<p class="ok" *ngIf="mensaje">{{ mensaje }}</p>
+
+<div class="form" *ngIf="mostrarForm">
+  <h3>{{ editandoId ? 'Editar camiseta' : 'Nueva camiseta' }}</h3>
+  <div class="rejilla">
+    <label>Nombre <input [(ngModel)]="form.nombre" /></label>
+    <label>Equipo
+      <select [(ngModel)]="form.equipo_id">
+        <option [ngValue]="null">— sin equipo —</option>
+        <option *ngFor="let e of equipos" [ngValue]="e.id">{{ e.nombre }}</option>
+      </select>
+    </label>
+    <label>Temporada <input [(ngModel)]="form.temporada" /></label>
+    <label>Tipo
+      <select [(ngModel)]="form.tipo">
+        <option value="local">Local</option>
+        <option value="visitante">Visitante</option>
+        <option value="tercera">Tercera</option>
+      </select>
+    </label>
+    <label>Colección
+      <select [(ngModel)]="form.coleccion">
+        <option value="actual">Actual</option>
+        <option value="retro">Retro</option>
+      </select>
+    </label>
+    <label>Precio (€) <input type="number" [(ngModel)]="form.precio" /></label>
+    <label>Stock <input type="number" [(ngModel)]="form.stock" /></label>
+    <label class="ancho">Imagen (URL o ruta, ej: /img/camisetas/foto.jpg) <input [(ngModel)]="form.imagen_url" /></label>
+    <label class="ancho">Descripción <input [(ngModel)]="form.descripcion" /></label>
+    <label class="check"><input type="checkbox" [(ngModel)]="form.destacado" /> Destacada</label>
+  </div>
+  <div class="acciones">
+    <button class="btn btn-claro" (click)="cancelar()">Cancelar</button>
+    <button class="btn btn-marino" (click)="guardar()">Guardar</button>
+  </div>
+</div>
+
+<p class="cuenta">{{ camisetas.length }} camisetas en total</p>
+<table>
+  <thead>
+    <tr><th></th><th>Nombre</th><th>Equipo</th><th>Tipo</th><th>Col.</th><th>€</th><th>Stock</th><th></th></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of camisetasFiltradas">
+      <td><img *ngIf="c.imagen_url" [src]="c.imagen_url" loading="lazy" /></td>
+      <td>{{ c.nombre }}</td>
+      <td>{{ c.equipo_nombre }}</td>
+      <td>{{ c.tipo }}</td>
+      <td>{{ c.coleccion }}</td>
+      <td>{{ c.precio }}</td>
+      <td>{{ c.stock }}</td>
+      <td class="btns">
+        <button (click)="editar(c)">Editar</button>
+        <button (click)="borrar(c)">Borrar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="cuenta" *ngIf="hayMas">Mostrando las primeras 100. Usa el buscador para afinar.</p>
+
+<style>
+  .barra { display: flex; gap: 1rem; margin-bottom: 1rem; }
+  .buscar { flex: 1; padding: 0.6rem 0.9rem; border: 1px solid var(--gris-borde); border-radius: 8px; }
+  .ok { background: #dcfce7; color: #166534; padding: 0.6rem; border-radius: 8px; }
+  .form { background: #f8fafc; border: 1px solid var(--gris-borde); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.2rem; }
+  .form h3 { margin: 0 0 0.8rem; }
+  .rejilla { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .rejilla label { display: flex; flex-direction: column; font-size: 0.85rem; font-weight: 600; gap: 0.3rem; }
+  .rejilla input, .rejilla select { padding: 0.5rem; border: 1px solid var(--gris-borde); border-radius: 8px; font-weight: 400; }
+  .rejilla .ancho { grid-column: 1 / -1; }
+  .rejilla .check { flex-direction: row; align-items: center; gap: 0.5rem; }
+  .acciones { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1rem; }
+  .cuenta { color: var(--gris-texto); font-size: 0.85rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--gris-borde); }
+  td img { width: 34px; height: 42px; object-fit: cover; border-radius: 4px; }
+  .btns button { border: none; background: none; cursor: pointer; font-size: 1rem; }
+</style>
