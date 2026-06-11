@@ -10,9 +10,6 @@ backend/target/
 # --- Logs y temporales ---
 *.log
 
-# --- Configuración local del asistente ---
-.claude/
-
 # --- Sistema operativo ---
 Thumbs.db
 .DS_Store
