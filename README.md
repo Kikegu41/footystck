@@ -1,4 +1,4 @@
-# FootyStck ⚽
+# FootyStck
 
 Tienda web de venta y personalización de camisetas de fútbol. Proyecto final del
 Ciclo Formativo de Grado Superior de **Desarrollo de Aplicaciones Web (DAW)**, de
